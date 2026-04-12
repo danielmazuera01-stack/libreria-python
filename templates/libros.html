@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Librería</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #1e1e2f;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 80%;
+            background: #2c2c3c;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #555;
+            text-align: center;
+        }
+
+        th {
+            background: #4CAF50;
+        }
+
+        tr:hover {
+            background: #3a3a4f;
+        }
+
+        .eliminar {
+            background: red;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📚 Librería</h1>
+
+<!-- FORMULARIO -->
+<form action="/agregar" method="POST">
+    <input type="text" name="titulo" placeholder="Título" required>
+    <input type="text" name="autor" placeholder="Autor" required>
+    <input type="number" name="anio" placeholder="Año" required>
+    <input type="text" name="genero" placeholder="Género" required>
+    <button type="submit">Agregar</button>
+</form>
+
+<!-- TABLA -->
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Año</th>
+        <th>Género</th>
+        <th>Acción</th>
+    </tr>
+
+    {% for libro in libros %}
+    <tr>
+        <td>{{ libro[0] }}</td>
+        <td>{{ libro[1] }}</td>
+        <td>{{ libro[2] }}</td>
+        <td>{{ libro[3] }}</td>
+        <td>{{ libro[4] }}</td>
+        <td>
+            <a href="/eliminar/{{ libro[0] }}">
+                <button class="eliminar">Eliminar</button>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</body>
+</html>

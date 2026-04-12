@@ -1,0 +1,27 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "group": "local",
+            "database": "libreria",
+            "username": "postgres",
+            "name": "db_libreria"
+        },
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "libreria_db",
+            "group": "local",
+            "database": "libreria",
+            "username": "postgres",
+            "password": "sandra12"
+        }
+    ]
+}
