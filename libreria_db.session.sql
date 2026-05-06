@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS libros CASCADE;
 DROP TABLE IF EXISTS autores CASCADE;
 DROP TABLE IF EXISTS generos CASCADE;
 
---  1. CREAR TABLA ORIGINAL (NO NORMALIZADA) CON AÑO
+--  1. CREAR TABLA INICIAL
 CREATE TABLE libros (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(100),
@@ -66,7 +66,7 @@ ADD CONSTRAINT fk_genero FOREIGN KEY (genero_id) REFERENCES generos(id);
 ALTER TABLE libros DROP COLUMN autor;
 ALTER TABLE libros DROP COLUMN genero;
 
--- 11. CONSULTA FINAL (CON AÑO )
+-- 11. CONSULTA FINAL 
 SELECT l.id, l.titulo, l.anio, a.nombre AS autor, g.nombre AS genero
 FROM libros l
 JOIN autores a ON l.autor_id = a.id

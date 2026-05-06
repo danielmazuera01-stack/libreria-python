@@ -1,4 +1,4 @@
-# ➕ Agregar libro (CORREGIDO)
+#  Agregar libro 
 def agregar_libro():
     conexion = conectar()
     cursor = conexion.cursor()
@@ -14,7 +14,7 @@ def agregar_libro():
     if resultado_autor:
         autor_id = resultado_autor[0]
     else:
-        print("❌ Autor no existe")
+        print(" Autor no existe")
         conexion.close()
         return
 
@@ -25,7 +25,7 @@ def agregar_libro():
     if resultado_genero:
         genero_id = resultado_genero[0]
     else:
-        print("❌ Género no existe")
+        print(" Género no existe")
         conexion.close()
         return
 
@@ -38,4 +38,4 @@ def agregar_libro():
     conexion.commit()
     conexion.close()
 
-    print("✅ Libro agregado")
+    print(" Libro agregado")

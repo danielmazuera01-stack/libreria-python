@@ -10,6 +10,7 @@ conexion = psycopg2.connect(
 )
 
 conexion.autocommit = True
+#El cursor es el que permite ejecutar comandos SQL
 cursor = conexion.cursor()
 
 # Crear la base de datos

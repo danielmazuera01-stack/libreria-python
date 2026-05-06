@@ -1,7 +1,8 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, session
 import psycopg2
 
 app = Flask(__name__)
+app.secret_key = "clave_super_secreta"
 
 def conectar():
     return psycopg2.connect(
@@ -11,9 +12,12 @@ def conectar():
         password="sandra12"
     )
 
-# 🏠 Inicio
+# 🏠 inicio
 @app.route("/")
 def inicio():
+    if "user" not in session:
+        return render_template("login.html")
+
     conexion = conectar()
     cursor = conexion.cursor()
 
@@ -28,18 +32,48 @@ def inicio():
 
     return render_template("index.html", libros=libros)
 
-# ➕ Agregar (CREA autor y genero si no existen)
+# 🔑 LOGIN (CAMBIADO)
+@app.route("/login", methods=["POST"])
+def login():
+    user = request.form["user"]
+    password = request.form["pass"]
+
+    # 👇 AQUÍ ESTÁ EL CAMBIO
+    if user == "daniel" and password == "1234":
+        session["user"] = user
+        return redirect("/")
+    else:
+        return "❌ Credenciales incorrectas"
+
+# 🔓 logout
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect("/")
+
+# ➕ agregar
 @app.route("/agregar", methods=["POST"])
 def agregar():
+    if "user" not in session:
+        return "🔒 Debes iniciar sesión"
+
     conexion = conectar()
     cursor = conexion.cursor()
 
     titulo = request.form['titulo']
-    anio = int(request.form['anio'])
+    anio = request.form['anio']
     autor = request.form['autor']
     genero = request.form['genero']
 
-    # 🔍 autor
+    if not titulo or not autor or not genero:
+        return "❌ Datos incompletos"
+
+    if not anio.isdigit():
+        return "❌ Año inválido"
+
+    anio = int(anio)
+
+    # autor
     cursor.execute("SELECT id FROM autores WHERE nombre=%s", (autor,))
     r = cursor.fetchone()
 
@@ -49,7 +83,7 @@ def agregar():
         cursor.execute("INSERT INTO autores (nombre) VALUES (%s) RETURNING id", (autor,))
         autor_id = cursor.fetchone()[0]
 
-    # 🔍 genero
+    # genero
     cursor.execute("SELECT id FROM generos WHERE nombre=%s", (genero,))
     r = cursor.fetchone()
 
@@ -59,7 +93,6 @@ def agregar():
         cursor.execute("INSERT INTO generos (nombre) VALUES (%s) RETURNING id", (genero,))
         genero_id = cursor.fetchone()[0]
 
-    # 💾 libro
     cursor.execute("""
         INSERT INTO libros (titulo, anio, autor_id, genero_id)
         VALUES (%s, %s, %s, %s)
@@ -73,6 +106,9 @@ def agregar():
 # 🗑 eliminar
 @app.route("/eliminar/<int:id>")
 def eliminar(id):
+    if "user" not in session:
+        return "🔒 Debes iniciar sesión"
+
     conexion = conectar()
     cursor = conexion.cursor()
 
